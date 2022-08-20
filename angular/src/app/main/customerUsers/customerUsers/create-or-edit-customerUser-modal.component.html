@@ -1,0 +1,82 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #customerUserForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="customerUser.id">{{ l('EditCustomerUser') }}</span>
+                        <span *ngIf="!customerUser.id">{{ l('CreateNewCustomerUser') }}</span>
+                    </h4>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        aria-label="Close"
+                        [disabled]="saving"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="my-3">
+                        <label class="form-label" for="CustomerName">{{ l('Customer') }}</label>
+                        <select
+                            name="customerUser.customerId"
+                            [(ngModel)]="customerUser.customerId"
+                            class="form-select"
+                        >
+                            <option value="">{{ l('SelectACustomer') }}</option>
+                            <option *ngFor="let item of allCustomers" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+ 
+                    <div class="my-3">
+                        <label class="form-label" for="UserName">{{ l('User') }}</label>
+                        <select name="customerUser.userId" [(ngModel)]="customerUser.userId" class="form-select">
+                            <option value="">{{ l('SelectAUser') }}</option>
+                            <option *ngFor="let item of allUsers" value="{{ item.id }}">{{ item.displayName }}</option>
+                        </select>
+                    </div>  
+
+                    <div class="my5">
+                        <label class="form-label" for="CustomerUser_BillingAmount">{{ l('BillingAmount') }}</label>
+                        <input
+                            type="number"
+                            #CustomerUser_BillingAmount="ngModel"
+                            id="CustomerUser_BillingAmount"
+                            class="form-control"
+                            [(ngModel)]="customerUser.billingAmount"
+                            name="BillingAmount"
+                        />
+                        <validation-messages [formCtrl]="CustomerUser_BillingAmount"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!customerUserForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
